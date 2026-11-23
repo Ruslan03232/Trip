@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#eef2f6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Поездки">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>Поездки с Олегом</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#eef2f6;--card:#fff;--ink:#12263a;--mute:#6b7c8d;--line:#d9e1e9;--ride:#1f6fb2;--ride-t:#fff;--paid:#bcd5ea;--paid-t:#2c4a66;--off:#e4e9ee;--due:#f6c928;--due-t:#12263a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b27;--card:#18283a;--ink:#e8eef4;--mute:#8da0b3;--line:#294056;--ride:#4a9be0;--ride-t:#08131d;--paid:#2a4560;--paid-t:#b8d0e6;--off:#213446;--due:#f6c928;--due-t:#12263a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1b27;--card:#18283a;--ink:#e8eef4;--mute:#8da0b3;--line:#294056;--ride:#4a9be0;--ride-t:#08131d;--paid:#2a4560;--paid-t:#b8d0e6;--off:#213446;--due:#f6c928;--due-t:#12263a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+button,.cell,.chip,summary{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 Onest,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:520px;margin:0 auto;padding:16px max(14px,env(safe-area-inset-right)) 40px max(14px,env(safe-area-inset-left))}
+h1{font-size:20px;margin:4px 2px 14px;font-weight:700}
+h2{font-size:16px;margin:0 0 10px;font-weight:700}
+.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:14px;border:1px solid var(--line)}
+.due{background:var(--due);color:var(--due-t);border:0}
+.due .big{font-size:52px;font-weight:700;line-height:1;letter-spacing:-1px}
+.due .sub{margin-top:6px;font-size:14px;opacity:.8}
+.btn{font:inherit;font-weight:500;border:0;border-radius:12px;padding:11px 16px;cursor:pointer;background:var(--ink);color:var(--bg)}
+.btn.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.due .btn{margin-top:14px;background:var(--due-t);color:#fff}
+.btn:focus-visible,.cell:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--ride);outline-offset:2px}
+.row{display:flex;align-items:center;gap:8px}
+.grow{flex:1}
+.pay{display:none;margin-top:12px;gap:8px;align-items:center}
+.pay.on{display:flex;flex-wrap:wrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px;width:100%}
+.chip{font:inherit;font-size:14px;padding:9px 12px;border-radius:10px;border:1px solid rgba(18,38,58,.4);background:transparent;color:var(--due-t);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--due-t);color:#fff;border-color:var(--due-t)}
+.dd{width:100%;font-size:12px;color:var(--mute)}
+input[type=number]{font:inherit;width:100px;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.due input{border-color:rgba(18,38,58,.35);background:#fff;color:#12263a}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.nav b{font-size:17px;text-transform:capitalize}
+.nav button{font:inherit;width:44px;height:44px;touch-action:manipulation;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;font-size:20px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.wd{font-size:12px;color:var(--mute);text-align:center;padding-bottom:2px}
+.cell{aspect-ratio:1/1.05;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;line-height:1.1;-webkit-tap-highlight-color:transparent}
+.cell small{font-size:11px;opacity:.85;margin-top:2px}
+.cell.r{background:var(--ride);color:var(--ride-t);border-color:var(--ride)}
+.cell.r.p{background:var(--paid);color:var(--paid-t);border-color:var(--paid)}
+.cell.n{background:var(--off);border-color:var(--off);color:var(--mute)}
+.cell.t{box-shadow:0 0 0 2px var(--due)}
+.blank{visibility:hidden}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mute);margin-top:12px}
+.leg i{display:inline-block;width:11px;height:11px;border-radius:4px;margin-right:5px;vertical-align:-1px}
+.stat{margin-top:12px;font-size:14px;color:var(--mute)}
+.stat b{color:var(--ink)}
+.pl{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--line);font-size:15px}
+.pl:first-of-type{border-top:0}
+.pl .d{width:96px;color:var(--mute)}
+.pl input{width:86px;padding:6px 8px}
+.tag{font-size:12px;color:var(--mute)}
+.x{margin-left:auto;font:inherit;border:0;background:transparent;color:var(--mute);font-size:20px;cursor:pointer;padding:4px 8px}
+summary{cursor:pointer;font-weight:700}
+.set{display:grid;grid-template-columns:1fr auto;gap:10px 12px;align-items:center;margin-top:12px;font-size:15px}
+.empty{color:var(--mute);font-size:14px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Поездки с Олегом</h1>
+  <section class="card due" aria-live="polite">
+    <div class="sub" id="dueHead">Олег должен</div>
+    <div class="big" id="dueSum">0 ₴</div>
+    <div class="sub" id="dueSub"></div>
+    <button class="btn" id="payBtn">Олег оплатил</button>
+    <div class="pay" id="payBox">
+      <div class="sub" style="width:100%">За какие дни оплата <button class="chip" id="payAll" type="button">Все / ни одного</button></div>
+      <div class="chips" id="payDays"></div>
+      <input type="number" id="payAmt" inputmode="numeric" aria-label="Сумма оплаты">
+      <button class="btn" id="paySave">Записать</button>
+      <button class="btn sec" id="payCancel" style="background:transparent;color:#12263a;border:1px solid rgba(18,38,58,.4)">Отмена</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="nav">
+      <button id="prev" aria-label="Предыдущий месяц">‹</button>
+      <b id="mTitle"></b>
+      <button id="next" aria-label="Следующий месяц">›</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="leg">
+      <span><i style="background:var(--ride)"></i>не оплачено</span>
+      <span><i style="background:var(--paid)"></i>оплачено</span>
+      <span><i style="background:var(--off)"></i>не возил</span>
+      <span>⇄ туда и обратно</span>
+    </div>
+    <div class="stat" id="mStat"></div>
+    <div class="stat">Нажимайте на день: один раз — «вёз», два — «туда и обратно», три — «не возил», четыре — очистить.</div>
+  </section>
+
+  <section class="card">
+    <h2>Оплаты</h2>
+    <div id="pays"></div>
+  </section>
+
+  <section class="card">
+    <details>
+      <summary>Тариф</summary>
+      <div class="set">
+        <label for="sRate">Поездка в одну сторону, ₴</label><input type="number" id="sRate" inputmode="numeric">
+        <label for="sPark">Паркинг за оплату, ₴</label><input type="number" id="sPark" inputmode="numeric">
+        <label for="sParkOn">Добавлять паркинг к сумме</label><input type="checkbox" id="sParkOn">
+      </div>
+    </details>
+  </section>
+  <section class="card">
+    <h2>Резервная копия</h2>
+    <div class="row">
+      <button class="btn sec" id="exp">Скачать копию</button>
+      <button class="btn sec" id="imp">Загрузить копию</button>
+      <input type="file" id="impFile" accept=".json,application/json" hidden>
+    </div>
+    <div class="stat">Данные хранятся в этом браузере. Копия нужна, чтобы перенести их на другой телефон или не потерять при очистке Safari.</div>
+  </section>
+  <div class="empty" id="saveState"></div>
+</main>
+
+<script>
+(function(){
+  var S={days:{},payments:[],settings:{rate:86,parking:25,parkingOn:true}};
+  var db=null,doc=null,ready=false,timer=null;
+  var MONTHS=["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
+  var MG=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+  var $=function(id){return document.getElementById(id)};
+  var pad=function(n){return n<10?"0"+n:""+n};
+  var iso=function(y,m,d){return y+"-"+pad(m+1)+"-"+pad(d)};
+  var now=new Date(),TODAY=iso(now.getFullYear(),now.getMonth(),now.getDate());
+  var view={y:now.getFullYear(),m:now.getMonth()};
+  var fmt=function(n){return Math.round(n).toLocaleString("ru-RU")};
+  var human=function(s){var p=s.split("-");return +p[2]+" "+MG[+p[1]-1]};
+
+  function lastPay(){var l="";S.payments.forEach(function(p){if(p.date>l)l=p.date});return l}
+  function cutoff(){var l="";S.payments.forEach(function(p){if(!p.days&&p.date>l)l=p.date});return l}
+  function isPaid(k){if(k<=cutoff())return true;return S.payments.some(function(p){return p.days&&p.days.indexOf(k)>=0})}
+  function unpaidDays(){return Object.keys(S.days).filter(function(k){return S.days[k]>0&&!isPaid(k)}).sort()}
+  function costFor(u){return u*S.settings.rate+(u>0&&S.settings.parkingOn?S.settings.parking:0)}
+  function openUnits(){var u=0;unpaidDays().forEach(function(k){u+=S.days[k]});return u}
+  function dueAmt(){return costFor(openUnits())}
+  function daysText(ds){var g={},o=[];ds.slice().sort().forEach(function(k){var m=k.slice(0,7);if(!g[m]){g[m]=[];o.push(m)}g[m].push(+k.slice(8))});return o.map(function(m){return g[m].join(", ")+" "+MG[+m.slice(5)-1]}).join(" · ")}
+
+  function render(){
+    var u=openUnits(),st=S.settings,lp=lastPay();
+    $("dueSum").textContent=fmt(dueAmt())+" ₴";
+    $("dueSub").textContent=u>0
+      ? u+" "+(u%10==1&&u!=11?"поездка":(u%10>1&&u%10<5&&(u<10||u>20)?"поездки":"поездок"))+" × "+st.rate+(st.parkingOn?" + паркинг "+st.parking:"")+(lp?" · с "+human(lp):"")
+      : "Всё оплачено"+(lp?" · последняя оплата "+human(lp):"");
+    renderCal();renderPays();
+    $("sRate").value=st.rate;$("sPark").value=st.parking;$("sParkOn").checked=!!st.parkingOn;
+  }
+
+  function renderCal(){
+    var y=view.y,m=view.m,lp=lastPay(),g=$("grid");
+    $("mTitle").textContent=MONTHS[m]+" "+y;
+    var h="";["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].forEach(function(w){h+='<div class="wd">'+w+"</div>"});
+    var off=(new Date(y,m,1).getDay()+6)%7,n=new Date(y,m+1,0).getDate();
+    for(var i=0;i<off;i++)h+='<div class="blank"></div>';
+    var rides=0,units=0;
+    for(var d=1;d<=n;d++){
+      var k=iso(y,m,d),v=S.days[k],c="cell",lab="";
+      if(v===1||v===2){c+=" r"+(isPaid(k)?" p":"");rides++;units+=v;lab="<small>"+(v===2?"⇄":"→")+"</small>"}
+      else if(v===0){c+=" n";lab="<small>—</small>"}
+      if(k===TODAY)c+=" t";
+      h+='<button class="'+c+'" data-k="'+k+'" aria-label="'+d+" "+MG[m]+'">'+d+lab+"</button>";
+    }
+    g.innerHTML=h;
+    $("mStat").innerHTML="За месяц: <b>"+rides+"</b> дн., <b>"+units+"</b> пов. · <b>"+fmt(units*S.settings.rate)+" ₴</b>";
+  }
+
+  function renderPays(){
+    var box=$("pays"),ps=S.payments.slice().sort(function(a,b){return a.date<b.date?1:-1});
+    if(!ps.length){box.innerHTML='<div class="empty">Оплат пока нет.</div>';return}
+    var sum=0,h="";
+    ps.forEach(function(p){sum+=p.amount;
+      h+='<div class="pl"><span class="d">'+human(p.date)+'</span><input type="number" inputmode="numeric" value="'+p.amount+'" data-id="'+p.id+'" aria-label="Сумма"><span class="tag">'+(p.days?p.days.length+" дн.":(p.est?"расчётно":""))+'</span><button class="x" data-del="'+p.id+'" aria-label="Удалить оплату">×</button>'+(p.days?'<div class="dd">'+daysText(p.days)+'</div>':'')+'</div>'});
+    box.innerHTML=h+'<div class="stat">Всего получено: <b>'+fmt(sum)+" ₴</b></div>";
+  }
+
+  function save(){
+    $("saveState").textContent="";
+    try{localStorage.setItem("oleg-trips",JSON.stringify(S))}catch(e){}
+    if(!doc||!ready)return;
+    clearTimeout(timer);
+    timer=setTimeout(function(){
+      doc.set({json:JSON.stringify(S)}).catch(function(){$("saveState").textContent="Не удалось сохранить в облако. Данные пока только в этом браузере."});
+    },400);
+  }
+
+  $("grid").addEventListener("click",function(e){
+    var b=e.target.closest("[data-k]");if(!b)return;
+    var k=b.dataset.k,v=S.days[k],nx=(v===undefined?1:v===1?2:v===2?0:undefined);
+    if(nx===undefined)delete S.days[k];else S.days[k]=nx;
+    save();render();
+  });
+  $("prev").onclick=function(){view.m--;if(view.m<0){view.m=11;view.y--}renderCal()};
+  $("next").onclick=function(){view.m++;if(view.m>11){view.m=0;view.y++}renderCal()};
+
+  var sel={},manual=false;
+  function selUnits(){var u=0;for(var k in sel){if(sel[k])u+=S.days[k]}return u}
+  function autoAmt(){if(!manual)$("payAmt").value=costFor(selUnits())||""}
+  function drawChips(){
+    var h="";unpaidDays().forEach(function(k){var p=k.split("-");
+      h+='<button type="button" class="chip" data-k="'+k+'" aria-pressed="'+(!!sel[k])+'">'+(+p[2])+" "+MG[+p[1]-1].slice(0,3)+(S.days[k]===2?" ⇄":"")+"</button>"});
+    $("payDays").innerHTML=h||'<span class="sub">Нет неоплаченных дней</span>';
+  }
+  $("payBtn").onclick=function(){
+    sel={};manual=false;unpaidDays().forEach(function(k){sel[k]=true});
+    drawChips();autoAmt();$("payBox").classList.add("on");$("payBtn").style.display="none";
+  };
+  $("payDays").addEventListener("click",function(e){var b=e.target.closest("[data-k]");if(!b)return;sel[b.dataset.k]=!sel[b.dataset.k];drawChips();autoAmt()});
+  $("payAll").onclick=function(){var all=unpaidDays(),any=all.some(function(k){return sel[k]});all.forEach(function(k){sel[k]=!any});drawChips();autoAmt()};
+  $("payAmt").addEventListener("input",function(){manual=true});
+  function closePay(){$("payBox").classList.remove("on");$("payBtn").style.display=""}
+  $("payCancel").onclick=closePay;
+  $("paySave").onclick=function(){
+    var a=parseFloat($("payAmt").value);if(!(a>=0))return;
+    var ds=Object.keys(sel).filter(function(k){return sel[k]}).sort();if(!ds.length)return;
+    S.payments.push({id:"p"+Date.now(),date:TODAY,amount:a,est:false,days:ds});
+    closePay();save();render();
+  };
+  $("pays").addEventListener("change",function(e){
+    var id=e.target.dataset.id;if(!id)return;
+    S.payments.forEach(function(p){if(p.id===id){p.amount=parseFloat(e.target.value)||0;p.est=false}});
+    save();render();
+  });
+  $("pays").addEventListener("click",function(e){
+    var id=e.target.dataset.del;if(!id)return;
+    S.payments=S.payments.filter(function(p){return p.id!==id});
+    save();render();
+  });
+  function setting(id,key,bool){
+    $(id).onchange=function(){var v=bool?this.checked:(parseFloat(this.value)||0);S.settings[key]=v;save();render()}
+  }
+  $("exp").onclick=function(){
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));
+    a.download="oleg-trips-"+TODAY+".json";document.body.appendChild(a);a.click();a.remove();
+  };
+  $("imp").onclick=function(){$("impFile").click()};
+  $("impFile").onchange=function(){
+    var f=this.files[0];if(!f)return;var r=new FileReader();
+    r.onload=function(){apply(r.result);save();render();$("saveState").textContent="Копия загружена."};
+    r.readAsText(f);this.value="";
+  };
+  setting("sRate","rate");setting("sPark","parking");setting("sParkOn","parkingOn",true);
+
+  function apply(raw){
+    try{var o=typeof raw==="string"?JSON.parse(raw):raw;
+      if(o&&o.days){S=o;S.payments=S.payments||[];S.settings=Object.assign({rate:86,parking:25,parkingOn:true},S.settings||{})}}catch(e){}
+  }
+
+  var SEED={"days": {"2026-07-04": 1, "2026-07-05": 0, "2026-07-06": 1, "2026-07-07": 1, "2026-07-08": 1, "2026-07-09": 1, "2026-07-10": 1, "2026-07-11": 0, "2026-07-12": 0, "2026-07-13": 0, "2026-07-14": 1, "2026-07-15": 0, "2026-07-16": 0, "2026-07-17": 1, "2026-07-18": 0, "2026-07-19": 0, "2026-07-20": 1, "2026-07-21": 1, "2026-07-22": 1, "2026-07-23": 1, "2026-07-24": 1, "2026-07-25": 0, "2026-07-26": 1, "2026-07-27": 1, "2026-07-28": 1, "2026-07-29": 1, "2026-07-30": 1, "2026-07-31": 0, "2026-08-01": 0, "2026-08-02": 0, "2026-08-03": 0, "2026-08-04": 0, "2026-08-05": 0, "2026-08-06": 0, "2026-08-07": 0, "2026-08-08": 0, "2026-08-09": 0, "2026-08-10": 1, "2026-08-11": 0, "2026-08-12": 1, "2026-08-13": 1, "2026-08-14": 1, "2026-08-15": 0, "2026-08-16": 0, "2026-08-17": 1, "2026-08-18": 1, "2026-08-19": 0, "2026-08-20": 1, "2026-08-21": 1, "2026-08-22": 0, "2026-08-23": 0, "2026-08-24": 1, "2026-08-25": 1, "2026-08-26": 1, "2026-08-27": 1, "2026-08-28": 1, "2026-08-29": 0, "2026-08-30": 0, "2026-08-31": 1, "2026-09-01": 1, "2026-09-02": 1, "2026-09-03": 1, "2026-09-04": 1, "2026-09-05": 0, "2026-09-06": 0, "2026-09-07": 2, "2026-09-08": 1, "2026-09-09": 1, "2026-09-10": 1, "2026-09-11": 1, "2026-09-12": 0, "2026-09-13": 0, "2026-09-14": 1, "2026-09-15": 1, "2026-09-16": 0, "2026-09-17": 1, "2026-09-18": 1, "2026-09-19": 2, "2026-09-20": 0, "2026-09-21": 1, "2026-09-22": 1, "2026-09-23": 1, "2026-09-24": 1, "2026-09-25": 1, "2026-09-26": 0, "2026-09-27": 0, "2026-09-28": 1, "2026-09-29": 0, "2026-09-30": 0, "2026-10-01": 1, "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 0, "2026-10-05": 1, "2026-10-06": 1, "2026-10-07": 1, "2026-10-08": 1, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 0, "2026-10-12": 0, "2026-10-13": 2, "2026-10-14": 1, "2026-10-15": 1, "2026-10-16": 1, "2026-10-17": 0, "2026-10-18": 0, "2026-10-19": 1, "2026-10-20": 1, "2026-10-21": 2, "2026-10-22": 2, "2026-10-23": 1, "2026-10-24": 0, "2026-10-25": 0, "2026-10-26": 0, "2026-10-27": 2, "2026-10-28": 2, "2026-10-29": 2, "2026-10-30": 0, "2026-10-31": 0, "2026-11-01": 0, "2026-11-02": 2, "2026-11-03": 2, "2026-11-04": 2, "2026-11-05": 2, "2026-11-06": 2, "2026-11-07": 0, "2026-11-08": 0, "2026-11-09": 0, "2026-11-10": 0, "2026-11-11": 0, "2026-11-12": 0, "2026-11-13": 1, "2026-11-14": 0, "2026-11-15": 0, "2026-11-16": 1, "2026-11-17": 1, "2026-11-18": 2, "2026-11-19": 2, "2026-11-20": 1, "2026-11-21": 0, "2026-11-22": 0}, "payments": [{"id": "p2026-07-09", "date": "2026-07-09", "amount": 430, "est": true}, {"id": "p2026-07-24", "date": "2026-07-24", "amount": 688, "est": true}, {"id": "p2026-08-10", "date": "2026-08-10", "amount": 516, "est": true}, {"id": "p2026-08-22", "date": "2026-08-22", "amount": 602, "est": true}, {"id": "p2026-08-28", "date": "2026-08-28", "amount": 430, "est": true}, {"id": "p2026-09-04", "date": "2026-09-04", "amount": 430, "est": true}, {"id": "p2026-09-15", "date": "2026-09-15", "amount": 688, "est": true}, {"id": "p2026-09-25", "date": "2026-09-25", "amount": 540, "est": false}, {"id": "p2026-10-08", "date": "2026-10-08", "amount": 602, "est": true}, {"id": "p2026-10-16", "date": "2026-10-16", "amount": 516, "est": true}, {"id": "p2026-10-23", "date": "2026-10-23", "amount": 602, "est": true}, {"id": "p2026-10-30", "date": "2026-10-30", "amount": 516, "est": true}, {"id": "p2026-11-06", "date": "2026-11-06", "amount": 860, "est": true}], "settings": {"rate": 86, "parking": 25, "parkingOn": true}};
+  var had=false;
+  try{var ls=localStorage.getItem("oleg-trips");if(ls){apply(ls);had=true}}catch(e){}
+  if(!had){apply(SEED);save()}
+  render();
+
+  if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});
+})();
+</script>
+</body>
+</html>
